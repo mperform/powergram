@@ -44,6 +44,7 @@ const LeftSidebar = () => {
             const isActive = pathname === link.route;
             return (
               <li
+                key={link.label}
                 className={`leftsidebar-link group ${
                   isActive && "bg-primary-500"
                 }`}
