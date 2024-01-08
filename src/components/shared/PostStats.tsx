@@ -10,11 +10,11 @@ import { Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 type PostStatsProps = {
-  post: Models.Document;
+  post?: Models.Document;
   userId: string;
 };
 const PostStats = ({ post, userId }: PostStatsProps) => {
-  const likesList = post.likes.map((user: Models.Document) => user.$id);
+  const likesList = post?.likes.map((user: Models.Document) => user.$id);
 
   const [likes, setlikes] = useState(likesList);
   const [isSaved, setIsSaved] = useState(false);
@@ -26,7 +26,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
   const { data: currentUser } = useGetCurrentUser();
 
   const savedPostRecord = currentUser?.save.find(
-    (record: Models.Document) => record.post.$id === post.$id
+    (record: Models.Document) => record.post.$id === post?.$id
   );
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
       newLikes.push(userId);
     }
     setlikes(newLikes);
-    likePost({ postId: post.$id, likesArray: newLikes });
+    likePost({ postId: post?.$id || '', likesArray: newLikes });
   };
 
   const handleSavePost = (e: React.MouseEvent) => {
@@ -56,7 +56,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
       deleteSavedPost(savedPostRecord.$id);
       return;
     }
-    savePost({ postId: post.$id, userId });
+    savePost({ postId: post?.$id || '', userId });
     setIsSaved(true);
   };
 
@@ -67,7 +67,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
           src={
             checkIsLiked(likes, userId)
               ? "/assets/icons/liked.svg"
-              : "assets/icons/like.svg"
+              : "/assets/icons/like.svg"
           }
           alt="like"
           width={20}
